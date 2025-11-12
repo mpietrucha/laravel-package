@@ -24,7 +24,7 @@ trait ProcessNovaComponent
 
         $component = $component->value;
 
-        Component::$component($this->package()->tag(), $this->package()->basePath('../resources/dist'));
+        Component::$component($this->package()->tag(), $this->package()->basePath('../dist'));
 
         return $this;
     }
