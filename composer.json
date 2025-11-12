@@ -1,6 +1,6 @@
 {
-    "name": "mpietrucha/package",
-    "description": "Package description.",
+    "name": "mpietrucha/laravel-package",
+    "description": "Laravel package tools.",
     "license": "MIT",
     "type": "library",
     "version": "1.0.0",
@@ -17,11 +17,17 @@
     "require-dev": {
         "ergebnis/composer-normalize": "dev-main",
         "mpietrucha/pint": "^1.0",
-        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan": "2.1.31",
+        "spatie/laravel-package-tools": "^1.92",
         "symfony/var-dumper": "^7.2"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Mpietrucha\\Laravel\\Package\\": "src/"
+        }
+    },
     "config": {
         "allow-plugins": {
             "ergebnis/composer-normalize": true
@@ -30,11 +36,11 @@
         "sort-packages": true
     },
     "scripts": {
-        "post-create-project-cmd": [
-            "@prettier:config"
-        ],
         "post-update-cmd": [
             "@composer normalize"
+        ],
+        "post-create-project-cmd": [
+            "@prettier:config"
         ],
         "lint": "pint --verbose --parallel",
         "prettier:config": "curl -sSLO https://raw.githubusercontent.com/mpietrucha/prettier/refs/heads/main/dist/.prettierrc",
