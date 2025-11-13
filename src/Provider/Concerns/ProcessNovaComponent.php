@@ -1,8 +1,8 @@
 <?php
 
-namespace Mpietrucha\Laravel\Package\Concerns\Provider;
+namespace Mpietrucha\Laravel\Package\Provider\Concerns;
 
-use Mpietrucha\Laravel\Package\Exception\NovaComponentException;
+use Mpietrucha\Laravel\Package\Provider\Exception\NovaComponentException;
 use Mpietrucha\Nova\Components\Component;
 use Mpietrucha\Utility\Instance;
 use Mpietrucha\Utility\Type;

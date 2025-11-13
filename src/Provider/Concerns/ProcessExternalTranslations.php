@@ -1,8 +1,8 @@
 <?php
 
-namespace Mpietrucha\Laravel\Package\Concerns\Provider;
+namespace Mpietrucha\Laravel\Package\Provider\Concerns;
 
-use Mpietrucha\Laravel\Package\Exception\ExternalTranslationsException;
+use Mpietrucha\Laravel\Package\Provider\Exception\ExternalTranslationsException;
 use Mpietrucha\Utility\Filesystem;
 use Mpietrucha\Utility\Filesystem\Path;
 use Mpietrucha\Utility\Type;

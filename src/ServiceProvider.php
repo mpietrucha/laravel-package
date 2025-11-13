@@ -2,8 +2,8 @@
 
 namespace Mpietrucha\Laravel\Package;
 
-use Mpietrucha\Laravel\Package\Concerns\Provider\ProcessExternalTranslations;
-use Mpietrucha\Laravel\Package\Concerns\Provider\ProcessNovaComponent;
+use Mpietrucha\Laravel\Package\Provider\Concerns\ProcessExternalTranslations;
+use Mpietrucha\Laravel\Package\Provider\Concerns\ProcessNovaComponent;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 

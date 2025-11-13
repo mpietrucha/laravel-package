@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpietrucha\Laravel\Package\Concerns;
+namespace Mpietrucha\Laravel\Package\Builder\Concerns;
 
 /**
  * @phpstan-require-extends \Mpietrucha\Laravel\Package\Builder

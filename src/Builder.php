@@ -2,8 +2,8 @@
 
 namespace Mpietrucha\Laravel\Package;
 
-use Mpietrucha\Laravel\Package\Concerns\HasExternalTranslations;
-use Mpietrucha\Laravel\Package\Concerns\HasNovaComponent;
+use Mpietrucha\Laravel\Package\Builder\Concerns\HasExternalTranslations;
+use Mpietrucha\Laravel\Package\Builder\Concerns\HasNovaComponent;
 use Mpietrucha\Utility\Concerns\Creatable;
 use Mpietrucha\Utility\Contracts\CreatableInterface;
 use Spatie\LaravelPackageTools\Package;
