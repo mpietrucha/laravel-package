@@ -33,11 +33,11 @@ abstract class Context implements UtilizableInterface
 
     protected static function hydrate(): string
     {
-        $file = Backtrace::get()->pipeThrough([
-            fn (EnumerableInterface $backtrace) => $backtrace->skip(1),
+        $directory = Backtrace::get()->pipeThrough([
+            fn (EnumerableInterface $backtrace) => $backtrace->reverse(),
             fn (EnumerableInterface $backtrace) => $backtrace->firstMap->file(),
-        ]) |> Normalizer::string(...);
+        ]) |> Normalizer::string(...) |> Path::directory(...);
 
-        return Str::before($file, 'src') |> Path::canonicalize(...);
+        return Str::before($directory, 'src') |> Path::canonicalize(...);
     }
 }
