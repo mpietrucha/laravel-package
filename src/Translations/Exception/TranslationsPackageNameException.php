@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpietrucha\Laravel\Package\Translation\Exception;
+namespace Mpietrucha\Laravel\Package\Translations\Exception;
 
 use Mpietrucha\Utility\Throwable\RuntimeException;
 

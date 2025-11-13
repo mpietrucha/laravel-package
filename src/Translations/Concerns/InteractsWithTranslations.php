@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpietrucha\Laravel\Package\Translation\Concerns;
+namespace Mpietrucha\Laravel\Package\Translations\Concerns;
 
 use Mpietrucha\Laravel\Package\Context;
-use Mpietrucha\Laravel\Package\Translation\Exception\TranslationsPackageNameException;
+use Mpietrucha\Laravel\Package\Translations\Exception\TranslationsPackageNameException;
 use Mpietrucha\Utility\Normalizer;
 use Mpietrucha\Utility\Str;
 
