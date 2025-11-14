@@ -37,7 +37,7 @@ trait ProcessExternalTranslations
             return null;
         }
 
-        $translations = Path::build("../../$translations/resources/lang", $this->package()->basePath());
+        $translations = Path::build("vendor/$translations/resources/lang", $this->app->basePath());
 
         if (Filesystem::is()->directory($translations)) {
             return $translations;
