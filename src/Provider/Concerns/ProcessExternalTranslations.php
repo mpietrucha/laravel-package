@@ -20,9 +20,11 @@ trait ProcessExternalTranslations
             return $this;
         }
 
+        $tag = $this->package()->tag();
+
         $this->publishes([
-            $translations => $this->app->langPath("vendor/{$this->package()->tag()}"),
-        ], "{$this->package()->tag()}-translations");
+            $translations => $this->app->langPath("vendor/$tag"),
+        ], "$tag-translations");
 
         return $this;
     }

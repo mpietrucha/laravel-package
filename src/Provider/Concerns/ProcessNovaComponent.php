@@ -20,11 +20,10 @@ trait ProcessNovaComponent
             return $this;
         }
 
-        Instance::unexists(Component::class) && NovaComponentException::create()->throw();
-
-        $component = $component->value;
-
-        Component::$component($this->package()->tag(), $this->package()->basePath('../dist'));
+        match (true) {
+            Instance::unexists(Component::class, Instance::LOAD) => NovaComponentException::create()->throw(),
+            default => Component::package($component, $this->package(), 'dist')
+        };
 
         return $this;
     }
