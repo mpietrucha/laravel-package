@@ -23,7 +23,7 @@ trait ProcessExternalTranslations
         $tag = $this->package()->tag();
 
         $this->publishes([
-            $translations => $this->app->langPath("vendor/$tag"),
+            $translations => Path::join('vendor', $tag) |> $this->app->langPath(...),
         ], "$tag-translations");
 
         return $this;
