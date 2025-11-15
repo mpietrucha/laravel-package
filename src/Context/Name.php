@@ -3,13 +3,14 @@
 namespace Mpietrucha\Laravel\Package\Context;
 
 use Mpietrucha\Laravel\Package\Context\Concerns\InteractsWithCache;
+use Mpietrucha\Laravel\Package\Context\Contracts\InteractsWithContextInterface;
 use Mpietrucha\Utility\Filesystem;
 use Mpietrucha\Utility\Str;
 use Mpietrucha\Utility\Type;
 use Mpietrucha\Utility\Utilizer\Concerns\Utilizable;
 use Mpietrucha\Utility\Utilizer\Contracts\UtilizableInterface;
 
-abstract class Name implements UtilizableInterface
+abstract class Name implements InteractsWithContextInterface, UtilizableInterface
 {
     use InteractsWithCache, Utilizable\Strings;
 

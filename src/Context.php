@@ -2,6 +2,7 @@
 
 namespace Mpietrucha\Laravel\Package;
 
+use Mpietrucha\Laravel\Package\Context\Contracts\InteractsWithContextInterface;
 use Mpietrucha\Laravel\Package\Context\Name;
 use Mpietrucha\Laravel\Package\Context\Provider;
 use Mpietrucha\Utility\Backtrace;
@@ -12,7 +13,7 @@ use Mpietrucha\Utility\Str;
 use Mpietrucha\Utility\Utilizer\Concerns\Utilizable;
 use Mpietrucha\Utility\Utilizer\Contracts\UtilizableInterface;
 
-abstract class Context implements UtilizableInterface
+abstract class Context implements InteractsWithContextInterface, UtilizableInterface
 {
     use Utilizable\Strings;
 
@@ -33,8 +34,12 @@ abstract class Context implements UtilizableInterface
 
     protected static function hydrate(): string
     {
-        $directory = Backtrace::get()->pipeThrough([
-            fn (EnumerableInterface $backtrace) => $backtrace->reverse(),
+        $backtrace = Backtrace::get();
+
+        $frames = $backtrace->takeUntil->internal(InteractsWithContextInterface::class);
+
+        $directory = $backtrace->pipeThrough([
+            fn (EnumerableInterface $backtrace) => $frames->count() - 1 |> $backtrace->skip(...),
             fn (EnumerableInterface $backtrace) => $backtrace->firstMap->file(),
         ]) |> Normalizer::string(...) |> Path::directory(...);
 
