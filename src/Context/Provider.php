@@ -4,12 +4,11 @@ namespace Mpietrucha\Laravel\Package\Context;
 
 use Mpietrucha\Laravel\Package\Context;
 use Mpietrucha\Laravel\Package\Context\Concerns\InteractsWithCache;
-use Mpietrucha\Laravel\Package\Context\Contracts\InteractsWithContextInterface;
 use Mpietrucha\Utility\Finder;
 use Mpietrucha\Utility\Utilizer\Concerns\Utilizable;
 use Mpietrucha\Utility\Utilizer\Contracts\UtilizableInterface;
 
-abstract class Provider implements InteractsWithContextInterface, UtilizableInterface
+abstract class Provider implements UtilizableInterface
 {
     use InteractsWithCache, Utilizable\Strings;
 
@@ -36,6 +35,7 @@ abstract class Provider implements InteractsWithContextInterface, UtilizableInte
         $finder = static::name() |> Finder::create($directory)->name(...);
 
         return $finder->ignoreVCSIgnored(true)
+            ->files()
             ->get()
             ->first();
     }

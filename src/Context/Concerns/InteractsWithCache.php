@@ -5,7 +5,7 @@ namespace Mpietrucha\Laravel\Package\Context\Concerns;
 use Mpietrucha\Utility\Collection;
 
 /**
- * @phpstan-require-implements \Mpietrucha\Laravel\Package\Context\Contracts\InteractsWithContextInterface
+ * @internal
  */
 trait InteractsWithCache
 {
