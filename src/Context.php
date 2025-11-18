@@ -36,10 +36,8 @@ abstract class Context implements UtilizableInterface
     {
         $backtrace = Backtrace::get();
 
-        $frames = Frame::internal(...) |> $backtrace->takeWhile(...);
-
         $directory = $backtrace->pipeThrough([
-            fn (EnumerableInterface $backtrace) => $frames->count() |> $backtrace->skip(...),
+            fn (EnumerableInterface $backtrace) => Frame::internal(...) |> $backtrace->skipUntilLast(...),
             fn (EnumerableInterface $backtrace) => $backtrace->firstMap->path(),
         ]) |> Normalizer::string(...) |> Path::directory(...);
 
