@@ -4,10 +4,12 @@ namespace Mpietrucha\Laravel\Package\Context;
 
 use Mpietrucha\Laravel\Package\Context;
 use Mpietrucha\Laravel\Package\Context\Concerns\InteractsWithCache;
+use Mpietrucha\Utility\Arr;
 use Mpietrucha\Utility\Filesystem;
 use Mpietrucha\Utility\Filesystem\Path;
 use Mpietrucha\Utility\Finder;
-use Mpietrucha\Utility\Normalizer;
+use Mpietrucha\Utility\Str;
+use Mpietrucha\Utility\Type;
 use Mpietrucha\Utility\Utilizer\Concerns\Utilizable;
 use Mpietrucha\Utility\Utilizer\Contracts\UtilizableInterface;
 
@@ -17,7 +19,12 @@ abstract class Provider implements UtilizableInterface
 
     public static function name(): string
     {
-        return static::utilize();
+        return Str::chopStart(static::utilize(), '*');
+    }
+
+    public static function pattern(): string
+    {
+        return Str::start(static::name(), '*');
     }
 
     public static function get(): ?string
@@ -35,26 +42,33 @@ abstract class Provider implements UtilizableInterface
 
     protected static function build(string $directory): ?string
     {
-        return static::default($directory) ?? static::default($directory, 'Providers') ?? static::find($directory);
-    }
+        $default = static::default($directory);
 
-    protected static function default(string $directory, ?string $intermediate = null): ?string
-    {
-        $directory = Path::join($directory, Normalizer::string($intermediate));
+        if (Type::string($default)) {
+            return $default;
+        }
 
-        $file = Path::build(static::name(), $directory);
-
-        return Filesystem::exists($file) ? $file : null;
-    }
-
-    protected static function find(string $directory): ?string
-    {
-        $finder = '*' . static::name() |> Finder::create($directory)->name(...);
+        $finder = static::pattern() |> Finder::create($directory)->name(...);
 
         return $finder->ignoreVCSIgnored(true)
             ->files()
             ->get()
             ->first();
+    }
+
+    protected static function default(string $directory, string ...$intermediates): ?string
+    {
+        $file = Path::build(static::name(), Path::join($directory, ...$intermediates));
+
+        if (Filesystem::exists($file)) {
+            return $file;
+        }
+
+        if (Arr::isNotEmpty($intermediates)) {
+            return null;
+        }
+
+        return static::default($directory, 'Providers') ?? static::default($directory, 'src') ?? static::default($directory, 'src', 'Providers');
     }
 
     protected static function hydrate(): string
