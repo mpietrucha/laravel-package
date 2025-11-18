@@ -38,7 +38,7 @@ abstract class Context implements UtilizableInterface
 
         $directory = $backtrace->pipeThrough([
             fn (EnumerableInterface $backtrace) => Frame::internal(...) |> $backtrace->skipUntilLast(...),
-            fn (EnumerableInterface $backtrace) => $backtrace->firstMap->path(),
+            fn (EnumerableInterface $backtrace) => $backtrace->firstMap->file(),
         ]) |> Normalizer::string(...) |> Path::directory(...);
 
         return Str::before($directory, 'src') |> Path::canonicalize(...);
