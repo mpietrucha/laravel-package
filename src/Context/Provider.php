@@ -4,7 +4,10 @@ namespace Mpietrucha\Laravel\Package\Context;
 
 use Mpietrucha\Laravel\Package\Context;
 use Mpietrucha\Laravel\Package\Context\Concerns\InteractsWithCache;
+use Mpietrucha\Utility\Filesystem;
+use Mpietrucha\Utility\Filesystem\Path;
 use Mpietrucha\Utility\Finder;
+use Mpietrucha\Utility\Normalizer;
 use Mpietrucha\Utility\Utilizer\Concerns\Utilizable;
 use Mpietrucha\Utility\Utilizer\Contracts\UtilizableInterface;
 
@@ -32,7 +35,21 @@ abstract class Provider implements UtilizableInterface
 
     protected static function build(string $directory): ?string
     {
-        $finder = static::name() |> Finder::create($directory)->name(...);
+        return static::default($directory) ?? static::default($directory, 'Providers') ?? static::find($directory);
+    }
+
+    protected static function default(string $directory, ?string $intermediate = null): ?string
+    {
+        $directory = Path::join($directory, Normalizer::string($intermediate));
+
+        $file = Path::build(static::name(), $directory);
+
+        return Filesystem::exists($file) ? $file : null;
+    }
+
+    protected static function find(string $directory): ?string
+    {
+        $finder = '*' . static::name() |> Finder::create($directory)->name(...);
 
         return $finder->ignoreVCSIgnored(true)
             ->files()
@@ -42,6 +59,6 @@ abstract class Provider implements UtilizableInterface
 
     protected static function hydrate(): string
     {
-        return '*ServiceProvider.php';
+        return 'ServiceProvider.php';
     }
 }

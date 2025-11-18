@@ -10,9 +10,7 @@ use Spatie\LaravelPackageTools\Package;
 
 class Builder extends Package implements CreatableInterface
 {
-    use Creatable;
-    use HasExternalTranslations;
-    use HasNovaComponent;
+    use Creatable, HasExternalTranslations, HasNovaComponent;
 
     public function tag(): string
     {

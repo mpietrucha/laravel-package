@@ -12,8 +12,7 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
  */
 abstract class ServiceProvider extends PackageServiceProvider
 {
-    use ProcessExternalTranslations;
-    use ProcessNovaComponent;
+    use ProcessExternalTranslations, ProcessNovaComponent;
 
     abstract public function configure(Builder $package): void;
 
