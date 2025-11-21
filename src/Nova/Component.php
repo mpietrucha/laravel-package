@@ -4,8 +4,8 @@ namespace Mpietrucha\Laravel\Package\Nova;
 
 use Mpietrucha\Laravel\Package\Nova\Enums\Component as Type;
 use Mpietrucha\Laravel\Package\ServiceProvider;
-use Mpietrucha\Utility\Forward;
 use Mpietrucha\Utility\Forward\Contracts\ForwardInterface;
+use Mpietrucha\Utility\Forward\Dependency;
 
 abstract class Component
 {
@@ -20,6 +20,6 @@ abstract class Component
 
     protected static function dependency(): ForwardInterface
     {
-        return Forward::dependency('Mpietrucha\Nova\Components\Component', 'mpietrucha/nova', 'nova components');
+        return Dependency::use('Mpietrucha\Nova\Components\Component', 'mpietrucha/nova', 'nova components');
     }
 }

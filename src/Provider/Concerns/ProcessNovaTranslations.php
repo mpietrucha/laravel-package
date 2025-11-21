@@ -3,7 +3,7 @@
 namespace Mpietrucha\Laravel\Package\Provider\Concerns;
 
 use Mpietrucha\Laravel\Package\Translations;
-use Mpietrucha\Utility\Forward;
+use Mpietrucha\Utility\Forward\Dependency;
 use Mpietrucha\Utility\Normalizer;
 
 /**
@@ -19,7 +19,7 @@ trait ProcessNovaTranslations
             return $this;
         }
 
-        $dependency = Forward::dependency('Laravel\Nova\Nova', 'laravel/nova', 'nova translations');
+        $dependency = Dependency::use('Laravel\Nova\Nova', 'laravel/nova', 'nova translations');
 
         $dependency->get('translations', Translations::json($this));
 
