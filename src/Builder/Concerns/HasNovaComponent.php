@@ -2,21 +2,21 @@
 
 namespace Mpietrucha\Laravel\Package\Builder\Concerns;
 
-use Mpietrucha\Laravel\Package\Builder\Enum\Nova;
+use Mpietrucha\Laravel\Package\Nova\Enums\Component;
 
 /**
  * @phpstan-require-extends \Mpietrucha\Laravel\Package\Builder
  */
 trait HasNovaComponent
 {
-    protected ?Nova $novaComponent = null;
+    protected ?Component $novaComponent = null;
 
-    public function novaComponent(): ?Nova
+    public function novaComponent(): ?Component
     {
         return $this->novaComponent;
     }
 
-    public function hasNovaComponent(Nova $component = Nova::MIX): static
+    public function hasNovaComponent(Component $component = Component::MIX): static
     {
         $this->novaComponent = $component;
 

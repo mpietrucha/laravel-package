@@ -2,8 +2,10 @@
 
 namespace Mpietrucha\Laravel\Package;
 
+use Illuminate\Contracts\Foundation\Application;
 use Mpietrucha\Laravel\Package\Provider\Concerns\ProcessExternalTranslations;
 use Mpietrucha\Laravel\Package\Provider\Concerns\ProcessNovaComponent;
+use Mpietrucha\Laravel\Package\Provider\Concerns\ProcessNovaTranslations;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -12,7 +14,9 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
  */
 abstract class ServiceProvider extends PackageServiceProvider
 {
-    use ProcessExternalTranslations, ProcessNovaComponent;
+    use ProcessExternalTranslations;
+    use ProcessNovaComponent;
+    use ProcessNovaTranslations;
 
     abstract public function configure(Builder $package): void;
 
@@ -32,11 +36,17 @@ abstract class ServiceProvider extends PackageServiceProvider
     public function bootingPackage(): void
     {
         $this->bootPackageNovaComponent();
+        $this->bootPackageNovaTranslations();
         $this->bootPackageExternalTranslations();
     }
 
-    protected function package(): Builder
+    public function package(): Builder
     {
         return $this->package;
+    }
+
+    public function app(): Application
+    {
+        return $this->app;
     }
 }

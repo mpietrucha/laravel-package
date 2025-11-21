@@ -27,9 +27,9 @@ abstract class Context implements UtilizableInterface
         return Provider::get();
     }
 
-    public static function directory(): string
+    public static function directory(): ?string
     {
-        return static::utilize();
+        return static::utilize() |> Str::nullWhenEmpty(...);
     }
 
     protected static function hydrate(): string

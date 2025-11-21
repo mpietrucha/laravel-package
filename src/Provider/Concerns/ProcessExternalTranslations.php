@@ -2,9 +2,7 @@
 
 namespace Mpietrucha\Laravel\Package\Provider\Concerns;
 
-use Mpietrucha\Laravel\Package\Provider\Exception\ExternalTranslationsException;
-use Mpietrucha\Utility\Filesystem;
-use Mpietrucha\Utility\Filesystem\Path;
+use Mpietrucha\Laravel\Package\Translations;
 use Mpietrucha\Utility\Type;
 
 /**
@@ -12,37 +10,16 @@ use Mpietrucha\Utility\Type;
  */
 trait ProcessExternalTranslations
 {
-    protected function bootPackageExternalTranslations(): static
+    public function bootPackageExternalTranslations(): static
     {
-        $translations = $this->buildPackageExternalTranslations();
+        $translations = $this->package()->externalTranslations();
 
         if (Type::null($translations)) {
             return $this;
         }
 
-        $tag = $this->package()->tag();
-
-        $this->publishes([
-            $translations => Path::join('vendor', $tag) |> $this->app->langPath(...),
-        ], "$tag-translations");
+        $this->publishes(Translations::vendors($translations, $this), Translations::tag($this));
 
         return $this;
-    }
-
-    protected function buildPackageExternalTranslations(): ?string
-    {
-        $translations = $this->package()->externalTranslations();
-
-        if (Type::null($translations)) {
-            return null;
-        }
-
-        $translations = Path::build("vendor/$translations/resources/lang", $this->app->basePath());
-
-        if (Filesystem::is()->directory($translations)) {
-            return $translations;
-        }
-
-        ExternalTranslationsException::for($translations)->throw();
     }
 }

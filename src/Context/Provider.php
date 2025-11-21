@@ -31,6 +31,10 @@ abstract class Provider implements UtilizableInterface
     {
         $directory = Context::directory();
 
+        if (Type::null($directory)) {
+            return null;
+        }
+
         if ($provider = static::cache()->get($directory)) {
             return $provider;
         }

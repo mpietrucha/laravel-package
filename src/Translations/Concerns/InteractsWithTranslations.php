@@ -3,24 +3,23 @@
 namespace Mpietrucha\Laravel\Package\Translations\Concerns;
 
 use Mpietrucha\Laravel\Package\Context;
-use Mpietrucha\Laravel\Package\Translations\Exception\TranslationsPackageNameException;
+use Mpietrucha\Laravel\Package\Translations\Exception\TranslationPackageException;
 use Mpietrucha\Utility\Normalizer;
 use Mpietrucha\Utility\Str;
 
 trait InteractsWithTranslations
 {
+    protected static ?string $translationsPackageName = null;
+
     /**
      * @param  null|array<string, string>  $properties
      */
     public static function __(string $key, ?array $properties = null): string
     {
-        $key = Str::sprintf('%s::%s', static::translationsPackageName(), $key);
+        $name = Context::name() ?? static::$translationsPackageName ?? TranslationPackageException::create()->throw();
 
-        return __($key, Normalizer::array($properties)) /** @phpstan-ignore argument.type */;
-    }
+        $key = Str::sprintf('%s::%s', $name, $key);
 
-    protected static function translationsPackageName(): string
-    {
-        return Context::name() ?? TranslationsPackageNameException::create()->throw();
+        return __($key, Normalizer::array($properties)); /** @phpstan-ignore argument.type */
     }
 }

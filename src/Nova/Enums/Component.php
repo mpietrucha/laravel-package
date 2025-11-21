@@ -1,8 +1,8 @@
 <?php
 
-namespace Mpietrucha\Laravel\Package\Builder\Enum;
+namespace Mpietrucha\Laravel\Package\Nova\Enums;
 
-enum Nova: string
+enum Component: string
 {
     case MIX = 'mix';
 

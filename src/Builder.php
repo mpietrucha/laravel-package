@@ -4,13 +4,17 @@ namespace Mpietrucha\Laravel\Package;
 
 use Mpietrucha\Laravel\Package\Builder\Concerns\HasExternalTranslations;
 use Mpietrucha\Laravel\Package\Builder\Concerns\HasNovaComponent;
+use Mpietrucha\Laravel\Package\Builder\Concerns\HasNovaTranslations;
 use Mpietrucha\Utility\Concerns\Creatable;
 use Mpietrucha\Utility\Contracts\CreatableInterface;
 use Spatie\LaravelPackageTools\Package;
 
 class Builder extends Package implements CreatableInterface
 {
-    use Creatable, HasExternalTranslations, HasNovaComponent;
+    use Creatable;
+    use HasExternalTranslations;
+    use HasNovaComponent;
+    use HasNovaTranslations;
 
     public function tag(): string
     {

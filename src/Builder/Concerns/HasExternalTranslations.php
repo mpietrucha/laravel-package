@@ -2,21 +2,34 @@
 
 namespace Mpietrucha\Laravel\Package\Builder\Concerns;
 
+use Mpietrucha\Utility\Arr;
+
 /**
  * @phpstan-require-extends \Mpietrucha\Laravel\Package\Builder
+ *
+ * @phpstan-type Translations array<int, string>
  */
 trait HasExternalTranslations
 {
-    protected ?string $externalTranslations = null;
+    /**
+     * @var null|Translations
+     */
+    protected ?array $externalTranslations = null;
 
-    public function externalTranslations(): ?string
+    /**
+     * @return null|Translations
+     */
+    public function externalTranslations(): ?array
     {
         return $this->externalTranslations;
     }
 
-    public function hasExternalTranslations(string $translations): static
+    /**
+     * @param  string|Translations  $translations
+     */
+    public function hasExternalTranslations(array|string $translations): static
     {
-        $this->externalTranslations = $translations;
+        $this->externalTranslations = Arr::wrap($translations);
 
         return $this;
     }
