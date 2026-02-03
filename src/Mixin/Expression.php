@@ -11,7 +11,7 @@ abstract class Expression
     {
         $name = static::name($trait);
 
-        return Str::sprintf('class %s { use %s; }; return new %s', $name, $trait, $name);
+        return Str::sprintf('<?php class %s { use %s; }; return new %s;', $name, $trait, $name);
     }
 
     protected static function name(string $trait): string
