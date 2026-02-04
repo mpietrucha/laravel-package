@@ -8,6 +8,7 @@ use Mpietrucha\Utility\Collection;
 use Mpietrucha\Utility\Enumerable\Contracts\EnumerableInterface;
 use Mpietrucha\Utility\Instance\Path;
 use Mpietrucha\Utility\Str;
+use Mpietrucha\Utility\Value;
 
 /**
  * @phpstan-import-type MixinCollection from \Mpietrucha\Laravel\Package\Mixin
@@ -52,9 +53,11 @@ class GenerateMixinAnalyzers extends Command
      */
     protected function mixins(Collection $mixins): string
     {
+        $use = Value::pipe('use %s;', Str::sprintf(...));
+
         $mixins = $mixins->pipeThrough([
             fn (EnumerableInterface $mixins) => Path::canonicalize(...) |> $mixins->map(...),
-            fn (EnumerableInterface $mixins) => Value::pipe('use %s;', Str::sprintf(...)) |> $mixins->map(...),
+            fn (EnumerableInterface $mixins) => $mixins->map($use),
         ]);
 
         return Str::eol() |> $mixins->join(...);

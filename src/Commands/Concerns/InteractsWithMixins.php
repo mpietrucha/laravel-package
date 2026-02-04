@@ -9,6 +9,7 @@ use Mpietrucha\Utility\Enumerable\Contracts\EnumerableInterface;
 use Mpietrucha\Utility\Filesystem;
 use Mpietrucha\Utility\Filesystem\Extension;
 use Mpietrucha\Utility\Filesystem\Path;
+use Mpietrucha\Utility\Process;
 use Mpietrucha\Utility\Str;
 use Mpietrucha\Utility\Type;
 
@@ -21,18 +22,21 @@ trait InteractsWithMixins
 {
     public function handle(): void
     {
-        Mixin::registry()->pipeThrough([
+        $mixins = Mixin::registry()->pipeThrough([
             fn (EnumerableInterface $registry) => $this->build(...) |> $registry->mapWithKeys(...),
             fn (EnumerableInterface $mixins) => $mixins->filter(),
-            fn (EnumerableInterface $mixins) => Filesystem::put(...) |> $mixins->each(...),
+            fn (EnumerableInterface $mixins) => Filesystem::put(...) |> $mixins->eachKeys(...),
+            fn (EnumerableInterface $mixins) => $mixins->keys(),
         ]);
+
+        Process::run(['composer', 'lint', ...$mixins]);
     }
 
     /**
      * @param  MixinCollection  $mixins
      * @return null|array<string, string>
      */
-    protected function build(string $destination, Collection $mixins): ?array
+    protected function build(Collection $mixins, string $destination): ?array
     {
         $content = $this->generate($destination, $mixins);
 
