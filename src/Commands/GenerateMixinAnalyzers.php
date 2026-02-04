@@ -20,7 +20,7 @@ class GenerateMixinAnalyzers extends Command
     /**
      * @var string
      */
-    protected $signature = 'mixins:analyzers
+    protected $signature = 'mixin:analyzers
                             {--directory=analyze/src : Output directory for analyzers}
                             {--namespace=App\Analyze : Namespace of analyzer class}';
 

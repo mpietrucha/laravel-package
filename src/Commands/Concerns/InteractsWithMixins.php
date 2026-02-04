@@ -29,6 +29,7 @@ trait InteractsWithMixins
             fn (EnumerableInterface $mixins) => $mixins->keys(),
         ]);
 
+        /** @var list<string> $mixins */
         Process::run(['composer', 'lint', ...$mixins]);
     }
 

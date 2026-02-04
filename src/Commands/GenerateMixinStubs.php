@@ -25,7 +25,7 @@ class GenerateMixinStubs extends Command implements CompatibleInterface
     /**
      * @var string
      */
-    protected $signature = 'mixins:stub
+    protected $signature = 'mixin:stubs
                             {--directory=phpstan/stubs : Output file}';
 
     /**
