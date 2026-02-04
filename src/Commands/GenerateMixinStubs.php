@@ -46,7 +46,7 @@ class GenerateMixinStubs extends Command implements CompatibleInterface
 
         $class = Path::name($destination);
 
-        return $this->hydrate($namespace, $this->docblock($mixins), $destination);
+        return $this->hydrate($namespace, $this->docblock($mixins), $class);
     }
 
     protected function stub(): string
@@ -61,9 +61,9 @@ class GenerateMixinStubs extends Command implements CompatibleInterface
     {
         $mixins = $this->signatures(...) |> $mixins->map(...);
 
-        $mixins->prepend('/**')->append('*/');
+        $eol = Str::eol();
 
-        return Str::eol() |> $mixins->join(...);
+        return $mixins->prepend($eol, '/**')->push('*/', $eol)->join($eol);
     }
 
     protected function signatures(string $mixin): string

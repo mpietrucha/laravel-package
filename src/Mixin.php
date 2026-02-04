@@ -98,13 +98,13 @@ class Mixin implements CompatibleInterface, CreatableInterface
         ]);
     }
 
-    protected static function register(string $mixin, object|string $destination): void
+    protected static function register(string $destination, object|string $instance): void
     {
         $destination = Instance::namespace($destination);
 
         $mixins = static::registry()->getOrPut($destination, Collection::create(...));
 
-        $mixins->push($mixin);
+        $mixins->push($instance);
     }
 
     protected static function compatibility(object|string $instance): bool

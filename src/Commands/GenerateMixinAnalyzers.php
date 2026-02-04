@@ -54,9 +54,14 @@ class GenerateMixinAnalyzers extends Command
     {
         $mixins = $mixins->pipeThrough([
             fn (EnumerableInterface $mixins) => Path::canonicalize(...) |> $mixins->map(...),
-            fn (EnumerableInterface $mixins) => fn (string $mixin) => Str::sprintf('use %s;', $mixin) |> $mixins->map(...),
+            fn (EnumerableInterface $mixins) => $this->use(...) |> $mixins->map(...),
         ]);
 
         return Str::eol() |> $mixins->join(...);
+    }
+
+    protected function use(string $mixin): string
+    {
+        return Str::sprintf('use %s;', $mixin);
     }
 }
