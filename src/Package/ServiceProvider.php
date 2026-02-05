@@ -1,9 +1,8 @@
 <?php
 
-namespace Mpietrucha\Laravel\Essentials;
+namespace Mpietrucha\Laravel\Essentials\Package;
 
 use Illuminate\Contracts\Foundation\Application;
-use Mpietrucha\Laravel\Essentials\Package\Builder;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
