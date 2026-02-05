@@ -9,28 +9,52 @@ use Mpietrucha\Utility\Enumerable\Contracts\EnumerableInterface;
 use Mpietrucha\Utility\Filesystem;
 use Mpietrucha\Utility\Filesystem\Extension;
 use Mpietrucha\Utility\Filesystem\Path;
+use Mpietrucha\Utility\Normalizer;
 use Mpietrucha\Utility\Process;
 use Mpietrucha\Utility\Str;
+use Mpietrucha\Utility\Stringable;
 use Mpietrucha\Utility\Type;
+use Symfony\Component\Console\Input\InputOption;
 
 /**
  * @phpstan-require-extends \Illuminate\Console\Command
  *
  * @phpstan-import-type MixinCollection from \Mpietrucha\Laravel\Package\Mixin
+ *
+ * @phpstan-type FileCollection \Mpietrucha\Utility\Collection<int, string>
  */
 trait InteractsWithMixins
 {
     public function handle(): void
     {
-        $mixins = Mixin::registry()->pipeThrough([
-            fn (EnumerableInterface $registry) => $this->build(...) |> $registry->mapWithKeys(...),
-            fn (EnumerableInterface $mixins) => $mixins->filter(),
-            fn (EnumerableInterface $mixins) => Filesystem::put(...) |> $mixins->eachKeys(...),
-            fn (EnumerableInterface $mixins) => $mixins->keys(),
+        $files = Mixin::registry()->pipeThrough([
+            fn (EnumerableInterface $files) => $this->build(...) |> $files->mapWithKeys(...),
+            fn (EnumerableInterface $files) => $files->filter(),
+            fn (EnumerableInterface $files) => $this->transform(...) |> $files->pipe(...),
+            fn (EnumerableInterface $files) => Filesystem::put(...) |> $files->eachKeys(...),
+            fn (EnumerableInterface $files) => $files->keys(),
         ]);
 
-        /** @var list<string> $mixins */
-        Process::run(['composer', 'lint', ...$mixins]);
+        $this->lint($files);
+
+        $this->done();
+
+        $files->each(fn (string $file) => $this->components->task($file));
+    }
+
+    protected function configure(): void
+    {
+        parent::configure();
+
+        $this->addOption('lint', null, InputOption::VALUE_NEGATABLE, 'Run lint after generation', true);
+        $this->addOption('merge', null, InputOption::VALUE_NEGATABLE, 'Merge all output into a single file', true);
+
+        $this->addOption('directory', null, InputOption::VALUE_OPTIONAL, 'Output directory', static::defaultDirectoryName());
+        $this->addOption('file', null, InputOption::VALUE_OPTIONAL, 'Output filename (used with --merge)', static::defaultFileName());
+    }
+
+    protected function done(): void
+    {
     }
 
     /**
@@ -88,5 +112,47 @@ trait InteractsWithMixins
             $this instanceof GenerateMixinAnalyzers => 'php',
             default => 'stub'
         };
+    }
+
+    /**
+     * @param  FileCollection  $files
+     * @return FileCollection
+     */
+    protected function transform(Collection $files): Collection
+    {
+        if ($this->option('merge') |> Normalizer::not(...)) {
+            return $files;
+        }
+
+        $php = '<?php';
+
+        $content = $files->pipeThrough([
+            fn (EnumerableInterface $files) => Filesystem::get(...) |> $files->map(...),
+            fn (EnumerableInterface $files) => Str::eol() |> $files->join(...) |> Str::of(...),
+            fn (Stringable $content) => $content->remove($php),
+            fn (Stringable $content) => $content->start($php),
+        ]);
+
+        $file = $this->option('file') |> $this->file(...);
+
+        return [$file => $content] |> Collection::create(...);
+    }
+
+    /**
+     * @param  FileCollection  $files
+     */
+    protected function lint(Collection $files): void
+    {
+        $this->option('lint') && Process::run(['composer', 'lint', ...$files]);
+    }
+
+    protected static function defaultFileName(): string
+    {
+        return 'Mixins';
+    }
+
+    protected static function defaultDirectoryName(): string
+    {
+        return Str::none();
     }
 }

@@ -25,13 +25,17 @@ class GenerateMixinStubs extends Command implements CompatibleInterface
     /**
      * @var string
      */
-    protected $signature = 'mixin:stubs
-                            {--directory=phpstan/stubs : Output file}';
+    protected $signature = 'mixin:stubs';
 
     /**
      * @var string
      */
     protected $description = 'Generate PHPStan stub file for registered mixins';
+
+    protected function done(): void
+    {
+        $this->info('Mixin stubs generated successfully.');
+    }
 
     /**
      * @param  MixinCollection  $mixins
@@ -63,7 +67,7 @@ class GenerateMixinStubs extends Command implements CompatibleInterface
 
         $eol = Str::eol();
 
-        return $mixins->prepend($eol, '/**')->push('*/', $eol)->join($eol);
+        return $mixins->unshift($eol, '/**')->push('*/', $eol)->join($eol);
     }
 
     protected function signatures(string $mixin): string
@@ -90,6 +94,11 @@ class GenerateMixinStubs extends Command implements CompatibleInterface
         $body = $declaration->first();
 
         return $body->remove(['public', 'function'])->prepend($return)->prepend('* @method')->squish();
+    }
+
+    protected static function defaultDirectoryName(): string
+    {
+        return 'phpstan/stubs';
     }
 
     protected static function compatibility(string $destination): mixed

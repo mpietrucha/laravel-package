@@ -21,13 +21,17 @@ class GenerateMixinAnalyzers extends Command
      * @var string
      */
     protected $signature = 'mixin:analyzers
-                            {--directory=analyze/src : Output directory for analyzers}
                             {--namespace=App\Analyze : Namespace of analyzer class}';
 
     /**
      * @var string
      */
     protected $description = 'Generate PHPStan analyzer files for registered mixins';
+
+    protected function done(): void
+    {
+        $this->info('Mixin analyzers generated successfully.');
+    }
 
     /**
      * @param  MixinCollection  $mixins
@@ -61,5 +65,10 @@ class GenerateMixinAnalyzers extends Command
         ]);
 
         return Str::eol() |> $mixins->join(...);
+    }
+
+    protected static function defaultDirectoryName(): string
+    {
+        return 'analyze/src';
     }
 }
