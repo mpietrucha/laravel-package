@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpietrucha\Laravel\Package\Context;
+namespace Mpietrucha\Laravel\Essentials\Context;
 
-use Mpietrucha\Laravel\Package\Context;
-use Mpietrucha\Laravel\Package\Context\Concerns\InteractsWithCache;
+use Mpietrucha\Laravel\Essentials\Context;
+use Mpietrucha\Laravel\Essentials\Context\Concerns\InteractsWithCache;
 use Mpietrucha\Utility\Arr;
 use Mpietrucha\Utility\Filesystem;
 use Mpietrucha\Utility\Filesystem\Path;

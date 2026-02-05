@@ -1,21 +1,20 @@
 <?php
 
-namespace Mpietrucha\Laravel\Essentials;
+namespace Mpietrucha\Laravel\Package;
 
 use Illuminate\Contracts\Foundation\Application;
-use Mpietrucha\Laravel\Essentials\Package\Builder;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 /**
- * @property \Mpietrucha\Laravel\Essentials\Package\Builder $package
+ * @property \Mpietrucha\Laravel\Package\Builder $package
  */
 abstract class ServiceProvider extends PackageServiceProvider
 {
     abstract public function configure(Builder $package): void;
 
     /**
-     * @param  \Mpietrucha\Laravel\Essentials\Package\Builder  $package
+     * @param  \Mpietrucha\Laravel\Package\Builder  $package
      */
     public function configurePackage(Package $package): void
     {

@@ -1,6 +1,6 @@
 {
-    "name": "mpietrucha/laravel-package",
-    "description": "Laravel package tools.",
+    "name": "mpietrucha/laravel-essentials",
+    "description": "Laravel essentials.",
     "license": "MIT",
     "type": "library",
     "version": "1.0.0",
@@ -30,7 +30,7 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Mpietrucha\\Laravel\\Package\\": "src/"
+            "Mpietrucha\\Laravel\\Essentials\\": "src/"
         }
     },
     "autoload-dev": {
@@ -44,13 +44,6 @@
         },
         "optimize-autoloader": true,
         "sort-packages": true
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Mpietrucha\\Laravel\\Package\\Providers\\MixinServiceProvider"
-            ]
-        }
     },
     "scripts": {
         "post-update-cmd": [

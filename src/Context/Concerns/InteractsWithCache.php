@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpietrucha\Laravel\Package\Context\Concerns;
+namespace Mpietrucha\Laravel\Essentials\Context\Concerns;
 
 use Mpietrucha\Utility\Collection;
 

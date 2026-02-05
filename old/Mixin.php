@@ -19,8 +19,6 @@ use Mpietrucha\Utility\Type;
 use Mpietrucha\Utility\Value;
 
 /**
- * @phpstan-type MixinCollection \Mpietrucha\Utility\Collection<int, class-string>
- * @phpstan-type MapCollection \Mpietrucha\Utility\Collection<string, MixinCollection>
  * @phpstan-type MacroCollection \Mpietrucha\Utility\Enumerable\Contracts\EnumerableInterface<string, callable>
  */
 class Mixin implements CompatibleInterface, CreatableInterface
@@ -29,21 +27,8 @@ class Mixin implements CompatibleInterface, CreatableInterface
 
     protected ?ReflectionInterface $reflection = null;
 
-    /**
-     * @var null|MapCollection
-     */
-    protected static ?EnumerableInterface $map = null;
-
     public function __construct(protected object $instance)
     {
-    }
-
-    /**
-     * @return MapCollection
-     */
-    public static function map(): EnumerableInterface
-    {
-        return static::$map ??= Collection::create();
     }
 
     public static function build(object|string $instance): static
@@ -70,8 +55,6 @@ class Mixin implements CompatibleInterface, CreatableInterface
         $handler = Macro::attach(...);
 
         Value::pipe($destination, $handler) |> $mixin->macros()->eachKeys(...);
-
-        static::use($destination, $instance);
     }
 
     public function instance(): object
@@ -96,15 +79,6 @@ class Mixin implements CompatibleInterface, CreatableInterface
             fn (EnumerableInterface $methods) => $methods->keyBy->getName(),
             fn (EnumerableInterface $methods) => $this->instance() |> $methods->map->getClosure(...),
         ]);
-    }
-
-    protected static function use(string $destination, object|string $instance): void
-    {
-        $destination = Instance::namespace($destination);
-
-        $mixins = static::map()->getOrPut($destination, Collection::create(...));
-
-        $mixins->push($instance);
     }
 
     protected static function compatibility(object|string $instance): bool

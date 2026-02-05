@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpietrucha\Laravel\Essentials;
+namespace Mpietrucha\Laravel\Package;
 
-use Mpietrucha\Laravel\Essentials\Context\Frame;
-use Mpietrucha\Laravel\Essentials\Context\Name;
-use Mpietrucha\Laravel\Essentials\Context\Provider;
+use Mpietrucha\Laravel\Package\Context\Frame;
+use Mpietrucha\Laravel\Package\Context\Name;
+use Mpietrucha\Laravel\Package\Context\Provider;
 use Mpietrucha\Utility\Backtrace;
 use Mpietrucha\Utility\Enumerable\Contracts\EnumerableInterface;
 use Mpietrucha\Utility\Filesystem\Path;
