@@ -2,12 +2,14 @@
 
 namespace Mpietrucha\Laravel\Essentials\Macro;
 
+use Mpietrucha\Laravel\Essentials\Macro\Exception\ImplementationException;
 use Mpietrucha\Utility\Arr;
 use Mpietrucha\Utility\Collection;
 use Mpietrucha\Utility\Concerns\Compatible;
 use Mpietrucha\Utility\Contracts\CompatibleInterface;
 use Mpietrucha\Utility\Enumerable\Contracts\EnumerableInterface;
 use Mpietrucha\Utility\Instance;
+use Mpietrucha\Utility\Instance\Method;
 use Mpietrucha\Utility\Type;
 
 /**
@@ -47,6 +49,8 @@ class Implementation implements CompatibleInterface
      */
     public static function use(string $trait, bool $type = self::EXTERNAL): void
     {
+        Method::unexists($trait, 'macro') && ImplementationException::create()->throw();
+
         static::all()->put($trait, $type);
     }
 

@@ -4,10 +4,8 @@ namespace Mpietrucha\Laravel\Essentials;
 
 use Mpietrucha\Laravel\Essentials\Concerns\InteractsWithMap;
 use Mpietrucha\Laravel\Essentials\Macro\Attempt;
-use Mpietrucha\Laravel\Essentials\Macro\Exception\MacroException;
+use Mpietrucha\Laravel\Essentials\Macro\Exception\DestinationException;
 use Mpietrucha\Laravel\Essentials\Macro\Implementation;
-use Mpietrucha\Utility\Concerns\Compatible;
-use Mpietrucha\Utility\Contracts\CompatibleInterface;
 use Mpietrucha\Utility\Instance;
 
 /**
@@ -16,16 +14,16 @@ use Mpietrucha\Utility\Instance;
  *
  * @method static MapCollection map()
  */
-class Macro implements CompatibleInterface
+abstract class Macro
 {
-    use Compatible, InteractsWithMap;
+    use InteractsWithMap;
 
     /**
      * @param  class-string  $destination
      */
     public static function use(string $destination, string $name, callable $handler): void
     {
-        static::incompatible($destination) && MacroException::create()->throw();
+        Implementation::incompatible($destination) && DestinationException::create()->throw();
 
         $macro = function (mixed ...$arguments) use ($name, $handler) {
             $context = isset($this) ? $this : null; /** @phpstan-ignore-line */
@@ -39,10 +37,5 @@ class Macro implements CompatibleInterface
         $destination::macro($name, $macro);
 
         static::store($destination, $handler, $name);
-    }
-
-    protected static function compatibility(string $destination): bool
-    {
-        return Implementation::compatible($destination);
     }
 }
