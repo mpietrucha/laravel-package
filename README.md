@@ -39,6 +39,7 @@ The `Mixin` class registers all public methods from a trait as macros on the des
 ```php
 use Mpietrucha\Laravel\Essentials\Mixin;
 use Illuminate\Support\Collection;
+use App\Mixins\CollectionMixin;
 
 Mixin::use(Collection::class, CollectionMixin::class);
 ```
@@ -70,6 +71,9 @@ collect(['Hello', 'World'])->toLower(); // ['hello', 'world']
 You can also pass an object instance instead of a trait:
 
 ```php
+use Illuminate\Support\Collection;
+use App\Mixins\CollectionMixin;
+
 Mixin::use(Collection::class, new CollectionMixin);
 ```
 
