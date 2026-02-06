@@ -2,6 +2,7 @@
 
 namespace Mpietrucha\Laravel\Essentials;
 
+use Mpietrucha\Laravel\Essentials\Concerns\InteractsWithMap;
 use Mpietrucha\Laravel\Essentials\Mixin\Exception\MixinException;
 use Mpietrucha\Laravel\Essentials\Mixin\Expression;
 use Mpietrucha\Utility\Collection;
@@ -18,29 +19,35 @@ use Mpietrucha\Utility\Reflection\Contracts\ReflectionInterface;
 use Mpietrucha\Utility\Type;
 use Mpietrucha\Utility\Value;
 
+/**
+ * @phpstan-type MixinCollection \Mpietrucha\Utility\Collection<int, object|class-string>
+ * @phpstan-type MapCollection \Mpietrucha\Utility\Collection<class-string, MixinCollection>
+ *
+ * @method static MapCollection map()
+ */
 class Mixin implements CompatibleInterface, CreatableInterface
 {
-    use Compatible, Creatable;
+    use Compatible, Creatable, InteractsWithMap;
 
-    public function __construct(protected object $mixin)
+    public function __construct(protected object $handler)
     {
     }
 
     /**
-     * @param  object|class-string  $mixin
+     * @param  object|class-string  $handler
      */
-    public static function build(object|string $mixin): static
+    public static function build(object|string $handler): static
     {
-        static::incompatible($mixin) && MixinException::create()->throw();
+        static::incompatible($handler) && MixinException::create()->throw();
 
-        if (Type::object($mixin)) {
-            return static::create($mixin);
+        if (Type::object($handler)) {
+            return static::create($handler);
         }
 
-        $file = Temporary::get($mixin);
+        $file = Temporary::get($handler);
 
         if (Filesystem::unexists($file)) {
-            Filesystem::put($file, Expression::generate($mixin));
+            Filesystem::put($file, Expression::generate($handler));
         }
 
         return Filesystem::requireOnce($file) |> static::create(...);
@@ -48,22 +55,22 @@ class Mixin implements CompatibleInterface, CreatableInterface
 
     /**
      * @param  class-string  $destination
-     * @param  object|class-string  $mixin
+     * @param  object|class-string  $handler
      */
-    public static function use(string $destination, object|string $mixin): void
+    public static function use(string $destination, object|string $handler): void
     {
-        $mixin = static::build($mixin);
+        $mixin = static::build($handler);
 
         $handler = Macro::use(...);
 
         Value::pipe($destination, $handler) |> $mixin->macros()->eachKeys(...);
 
-        static::store($destination, $mixin->get());
+        static::store($destination, $handler);
     }
 
     public function get(): object
     {
-        return $this->mixin;
+        return $this->handler;
     }
 
     protected function reflection(): ReflectionInterface
@@ -85,12 +92,12 @@ class Mixin implements CompatibleInterface, CreatableInterface
         ]);
     }
 
-    protected static function compatibility(object|string $mixin): bool
+    protected static function compatibility(object|string $handler): bool
     {
-        if (Type::object($mixin)) {
+        if (Type::object($handler)) {
             return true;
         }
 
-        return Instance::trait($mixin);
+        return Instance::trait($handler);
     }
 }

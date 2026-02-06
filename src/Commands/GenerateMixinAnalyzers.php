@@ -3,13 +3,26 @@
 namespace Mpietrucha\Laravel\Essentials\Commands;
 
 use Illuminate\Console\Command;
+use Mpietrucha\Laravel\Essentials\Mixin;
+use Mpietrucha\Utility\Collection;
+use Mpietrucha\Utility\Enumerable\Contracts\EnumerableInterface;
+use Mpietrucha\Utility\Filesystem;
+use Mpietrucha\Utility\Filesystem\Extension;
+use Mpietrucha\Utility\Filesystem\Path;
+use Mpietrucha\Utility\Instance\Path as FQN;
+use Mpietrucha\Utility\Str;
+use Mpietrucha\Utility\Type;
+use Mpietrucha\Utility\Value;
 
+/**
+ * @phpstan-import-type MixinCollection from \Mpietrucha\Laravel\Essentials\Mixin
+ */
 class GenerateMixinAnalyzers extends Command
 {
     /**
      * @var string
      */
-    protected $signature = 'mixin:analyzers {directory : Namespace of analyzer class}';
+    protected $signature = 'mixin:analyzers';
 
     /**
      * @var string
@@ -18,5 +31,92 @@ class GenerateMixinAnalyzers extends Command
 
     public function handle(): void
     {
+        $files = Mixin::map()->pipeThrough([
+            fn (EnumerableInterface $map) => $this->build(...) |> $map->mapWithKeys(...),
+            fn (EnumerableInterface $map) => $map->filter(),
+            fn (EnumerableInterface $map) => Filesystem::put(...) |> $map->eachKeys(...),
+            fn (EnumerableInterface $map) => $map->keys(),
+        ]);
+
+        if ($files->isEmpty()) {
+            return;
+        }
+
+        $this->info('Mixin analyzers generated successfully.');
+
+        $files->each(fn (string $file) => $this->components->task($file));
+    }
+
+    /**
+     * @param  MixinCollection  $mixins
+     * @param  class-string  $destination
+     * @return null|array<string, string>
+     */
+    protected function build(Collection $mixins, string $destination): ?array
+    {
+        $content = $this->generate($destination, $mixins);
+
+        if (Type::null($content)) {
+            return null;
+        }
+
+        return [$this->file($destination) => $content];
+    }
+
+    /**
+     * @param  class-string  $destination
+     * @param  MixinCollection  $mixins
+     */
+    protected function generate(string $destination, Collection $mixins): ?string
+    {
+        $mixins = $this->mixins($mixins);
+
+        if (Type::null($mixins)) {
+            return null;
+        }
+
+        $destination = FQN::canonicalize($destination);
+
+        $class = FQN::name($destination);
+
+        return $this->hydrate($class, $destination, $mixins);
+    }
+
+    protected function hydrate(mixed ...$arguments): string
+    {
+        $stub = $this->stub();
+
+        return Str::sprintf($stub, ...$arguments);
+    }
+
+    protected function stub(): string
+    {
+        return '<?php namespace %s; class %s extends %s { %s }';
+    }
+
+    /**
+     * @param  MixinCollection  $mixins
+     */
+    protected function mixins(Collection $mixins): ?string
+    {
+        $use = Value::pipe('use %s;', Str::sprintf(...));
+
+        $mixins = $mixins->pipeThrough([
+            fn (EnumerableInterface $mixins) => Type::string(...) |> $mixins->filter(...),
+            fn (EnumerableInterface $mixins) => FQN::canonicalize(...) |> $mixins->map(...),
+            fn (EnumerableInterface $mixins) => $mixins->map($use),
+        ]);
+
+        return Str::eol() |> $mixins->join(...) |> Str::nullWhenEmpty(...);
+    }
+
+    protected function file(string $destination): string
+    {
+        /** @var string */
+        $directory = $this->argument('directory');
+
+        $file = Extension::set(Path::name($destination), 'php');
+
+        return Path::build($file, $directory);
     }
 }

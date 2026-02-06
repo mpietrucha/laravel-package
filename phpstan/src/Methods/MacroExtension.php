@@ -50,7 +50,7 @@ final class MacroExtension implements MethodsClassReflectionExtension
             return null;
         }
 
-        return $map->get($method);
+        return $map->get($method) |> Closure::fromCallable(...);
     }
 
     protected function factory(): ClosureTypeFactory

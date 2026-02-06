@@ -2,7 +2,7 @@
 
 namespace Mpietrucha\Laravel\Essentials;
 
-use Closure;
+use Mpietrucha\Laravel\Essentials\Concerns\InteractsWithMap;
 use Mpietrucha\Laravel\Essentials\Macro\Attempt;
 use Mpietrucha\Laravel\Essentials\Macro\Exception\MacroException;
 use Mpietrucha\Laravel\Essentials\Macro\Implementation;
@@ -10,9 +10,15 @@ use Mpietrucha\Utility\Concerns\Compatible;
 use Mpietrucha\Utility\Contracts\CompatibleInterface;
 use Mpietrucha\Utility\Instance;
 
+/**
+ * @phpstan-type MacroCollection \Mpietrucha\Utility\Collection<string, callable>
+ * @phpstan-type MapCollection \Mpietrucha\Utility\Collection<class-string, MacroCollection>
+ *
+ * @method static MapCollection map()
+ */
 class Macro implements CompatibleInterface
 {
-    use Compatible;
+    use Compatible, InteractsWithMap;
 
     /**
      * @param  class-string  $destination
@@ -32,7 +38,7 @@ class Macro implements CompatibleInterface
 
         $destination::macro($name, $macro);
 
-        static::store($destination, Closure::fromCallable($handler), $name);
+        static::store($destination, $handler, $name);
     }
 
     protected static function compatibility(string $destination): bool
