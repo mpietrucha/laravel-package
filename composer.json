@@ -41,6 +41,13 @@
         "optimize-autoloader": true,
         "sort-packages": true
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Mpietrucha\\Laravel\\Essentials\\Providers\\MixinServiceProvider"
+            ]
+        }
+    },
     "scripts": {
         "post-update-cmd": [
             "@composer normalize"

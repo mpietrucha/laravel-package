@@ -61,9 +61,9 @@ class Mixin implements CompatibleInterface, CreatableInterface
     {
         $mixin = static::build($handler);
 
-        $handler = Macro::use(...);
+        $macro = Macro::use(...);
 
-        Value::pipe($destination, $handler) |> $mixin->macros()->eachKeys(...);
+        Value::pipe($destination, $macro) |> $mixin->macros()->eachKeys(...);
 
         static::store($destination, $handler);
     }

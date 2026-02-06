@@ -3,12 +3,12 @@
 namespace Mpietrucha\Laravel\Essentials\Providers;
 
 use Mpietrucha\Laravel\Essentials\Commands\GenerateMixinAnalyzers;
-use Mpietrucha\Laravel\Essentials\Package\Builder;
-use Mpietrucha\Laravel\Essentials\Package\ServiceProvider;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class MixinServiceProvider extends ServiceProvider
+class MixinServiceProvider extends PackageServiceProvider
 {
-    public function configure(Builder $package): void
+    public function configurePackage(Package $package): void
     {
         $package->hasConsoleCommand(GenerateMixinAnalyzers::class);
     }

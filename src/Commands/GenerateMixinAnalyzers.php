@@ -4,6 +4,7 @@ namespace Mpietrucha\Laravel\Essentials\Commands;
 
 use Illuminate\Console\Command;
 use Mpietrucha\Laravel\Essentials\Mixin;
+use Mpietrucha\Laravel\Essentials\Package\Context;
 use Mpietrucha\Utility\Collection;
 use Mpietrucha\Utility\Enumerable\Contracts\EnumerableInterface;
 use Mpietrucha\Utility\Filesystem;
@@ -91,7 +92,7 @@ class GenerateMixinAnalyzers extends Command
 
     protected function stub(): string
     {
-        return '<?php namespace %s; class %s extends %s { %s }';
+        return '<?php class %s extends %s { %s }';
     }
 
     /**
@@ -112,11 +113,10 @@ class GenerateMixinAnalyzers extends Command
 
     protected function file(string $destination): string
     {
-        /** @var string */
-        $directory = $this->argument('directory');
+        $directory = Path::build('phpstan/cache', Context::directory());
 
-        $file = Extension::set(Path::name($destination), 'php');
+        $file = Path::name($destination);
 
-        return Path::build($file, $directory);
+        return Path::build(Extension::set($file, 'php'), $directory);
     }
 }
