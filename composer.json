@@ -17,6 +17,7 @@
         "spatie/laravel-package-tools": "^1.92"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^3.6",
         "ergebnis/composer-normalize": "dev-main",
         "filament/support": "^5.2",
         "larastan/larastan": "^3.8",

@@ -22,7 +22,7 @@ class GenerateIdeHelpers extends Command
     public function handle(): void
     {
         $this->callSilently('ide-helper:generate');
-        $this->callSilently('ide-helper:models --write-mixin');
+        $this->callSilently('ide-helper:models', ['--write-mixin' => true]);
 
         app_path('Models') |> $this->lint(...);
 
