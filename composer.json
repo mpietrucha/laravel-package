@@ -44,7 +44,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Mpietrucha\\Laravel\\Essentials\\Providers\\MixinServiceProvider"
+                "Mpietrucha\\Laravel\\Essentials\\Providers\\EssentialsServiceProvider"
             ]
         }
     },

@@ -3,6 +3,7 @@
 namespace Mpietrucha\Laravel\Essentials\Commands;
 
 use Illuminate\Console\Command;
+use Mpietrucha\Laravel\Essentials\Commands\Concerns\InteractsWithLint;
 use Mpietrucha\Laravel\Essentials\Mixin;
 use Mpietrucha\Laravel\Essentials\Package\Context;
 use Mpietrucha\Utility\Collection;
@@ -20,6 +21,8 @@ use Mpietrucha\Utility\Value;
  */
 class GenerateMixinAnalyzers extends Command
 {
+    use InteractsWithLint;
+
     /**
      * @var string
      */
@@ -40,8 +43,12 @@ class GenerateMixinAnalyzers extends Command
         ]);
 
         if ($files->isEmpty()) {
+            $this->warn('No generated mixins found.');
+
             return;
         }
+
+        $this->lint($files);
 
         $this->info('Mixin analyzers generated successfully.');
 
