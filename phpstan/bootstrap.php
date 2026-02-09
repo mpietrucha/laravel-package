@@ -1,11 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Artisan;
-use Mpietrucha\Utility\Constant;
-use Mpietrucha\Utility\Filesystem;
-use Mpietrucha\Utility\Filesystem\Path;
+use Mpietrucha\PHPStan\IdeHelpers;
+use Mpietrucha\PHPStan\Laravel;
+use Mpietrucha\PHPStan\MixinAnalyzers;
 
-Constant::undefined('LARAVEL_START') && Path::build('vendor/larastan/larastan/bootstrap.php') |> Filesystem::requireOnce(...);
+Laravel::run();
 
-Artisan::call('ide:helpers');
-Artisan::call('mixin:analyzers');
+IdeHelpers::run();
+MixinAnalyzers::run();
