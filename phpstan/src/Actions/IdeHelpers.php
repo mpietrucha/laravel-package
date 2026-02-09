@@ -16,7 +16,7 @@ abstract class IdeHelpers extends Action
     {
         $composer = Composer::get()->file() |> Filesystem::hash(...);
 
-        if (Cache::stale($composer, 'composer')) {
+        if (Cache::stale('composer', $composer)) {
             return true;
         }
 
@@ -26,7 +26,7 @@ abstract class IdeHelpers extends Action
             return false;
         }
 
-        return Cache::stale($facades, 'facades');
+        return Cache::stale('facades', $facades);
     }
 
     protected static function handle(): void
