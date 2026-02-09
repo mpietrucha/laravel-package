@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpietrucha\PHPStan;
+namespace Mpietrucha\PHPStan\Actions;
 
 use Illuminate\Support\Facades\Artisan;
 use Mpietrucha\Laravel\Essentials\Mixin;

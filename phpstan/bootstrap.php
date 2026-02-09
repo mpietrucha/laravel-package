@@ -1,8 +1,8 @@
 <?php
 
-use Mpietrucha\PHPStan\IdeHelpers;
-use Mpietrucha\PHPStan\Laravel;
-use Mpietrucha\PHPStan\MixinAnalyzers;
+use Mpietrucha\PHPStan\Actions\IdeHelpers;
+use Mpietrucha\PHPStan\Actions\Laravel;
+use Mpietrucha\PHPStan\Actions\MixinAnalyzers;
 
 Laravel::run();
 

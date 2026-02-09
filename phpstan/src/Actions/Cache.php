@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpietrucha\PHPStan;
+namespace Mpietrucha\PHPStan\Actions;
 
 use Mpietrucha\Utility\Collection;
 use Mpietrucha\Utility\Enumerable\Contracts\EnumerableInterface;
