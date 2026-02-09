@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpietrucha\PHPStan\Actions;
+namespace Mpietrucha\PHPStan\Bootstrap;
 
 /**
  * @internal

@@ -1,8 +1,10 @@
 <?php
 
-namespace Mpietrucha\PHPStan\Actions;
+namespace Mpietrucha\PHPStan;
 
 use Illuminate\Support\Facades\Artisan;
+use Mpietrucha\PHPStan\Bootstrap\Action;
+use Mpietrucha\PHPStan\Bootstrap\Cache;
 use Mpietrucha\Utility\Composer;
 use Mpietrucha\Utility\Filesystem;
 use Mpietrucha\Utility\Type;
@@ -16,7 +18,7 @@ abstract class IdeHelpers extends Action
     {
         $composer = Composer::get()->file() |> Filesystem::hash(...);
 
-        if (Cache::stale('composer', $composer)) {
+        if (Cache::validate('composer', $composer)) {
             return true;
         }
 
@@ -26,7 +28,7 @@ abstract class IdeHelpers extends Action
             return false;
         }
 
-        return Cache::stale('facades', $facades);
+        return Cache::validate('facades', $facades);
     }
 
     protected static function handle(): void

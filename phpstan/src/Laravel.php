@@ -1,7 +1,8 @@
 <?php
 
-namespace Mpietrucha\PHPStan\Actions;
+namespace Mpietrucha\PHPStan;
 
+use Mpietrucha\PHPStan\Bootstrap\Action;
 use Mpietrucha\Utility\Constant;
 use Mpietrucha\Utility\Filesystem;
 use Mpietrucha\Utility\Filesystem\Path;

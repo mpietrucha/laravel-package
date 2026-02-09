@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpietrucha\PHPStan\Actions;
+namespace Mpietrucha\PHPStan\Bootstrap;
 
 use Mpietrucha\Utility\Collection;
 use Mpietrucha\Utility\Enumerable\Contracts\EnumerableInterface;
@@ -19,27 +19,27 @@ abstract class Cache
      */
     protected static ?EnumerableInterface $storage = null;
 
-    public static function get(string $name): ?string
+    public static function get(string $identifier): ?string
     {
-        return static::storage()->get($name);
+        return static::storage()->get($identifier);
     }
 
-    public static function set(string $name, string $value): void
+    public static function set(string $identifier, string $hash): void
     {
-        static::storage()->put($name, $value);
+        static::storage()->put($identifier, $hash);
 
-        $storage = static::storage()->toJson();
+        $file = static::file();
 
-        Filesystem::put(static::file(), $storage);
+        Filesystem::put($file, static::storage()->toJson());
     }
 
-    public static function stale(string $name, string $value): bool
+    public static function validate(string $identifier, string $hash): bool
     {
-        if (static::get($name) === $value) {
+        if (static::get($identifier) === $hash) {
             return false;
         }
 
-        static::set($name, $value);
+        static::set($identifier, $hash);
 
         return true;
     }
