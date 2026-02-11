@@ -24,14 +24,14 @@ class GenerateMixinAnalyzers extends Command
     /**
      * @var string
      */
-    protected $signature = 'mixin:analyzers';
+    protected $signature = 'mixin:analyzers
+                            {--directory=phpstan/cache : The output directory for generated analyzer files}
+                            {--cwd= : The current working directory used for generating analyzers}';
 
     /**
      * @var string
      */
-    protected $description = 'Generate PHPStan analyzer files for registered mixins
-                              {--cwd= : The current working directory used for generating analyzers}
-                              {--directory=phpstan/cache : The output directory for generated analyzer files}';
+    protected $description = 'Generate PHPStan analyzer files for registered mixins';
 
     public function handle(): void
     {
@@ -48,11 +48,11 @@ class GenerateMixinAnalyzers extends Command
             return;
         }
 
+        $files->each(fn (string $file) => $this->components->task($file));
+
         $this->lint($files);
 
         $this->info('Mixin analyzers generated successfully.');
-
-        $files->each(fn (string $file) => $this->components->task($file));
     }
 
     /**
