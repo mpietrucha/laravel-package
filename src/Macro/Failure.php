@@ -41,9 +41,11 @@ class Failure implements CreatableInterface
 
     protected function message(): string
     {
-        $message = $this->throwable()->value()->getMessage() |> Str::of(...);
+        $value = $this->throwable()->value();
 
         $method = $this->method();
+
+        $message = $value->getMessage() |> Str::of(...);
 
         $closure = $message->between('::', '()');
 
