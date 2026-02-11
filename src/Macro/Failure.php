@@ -41,15 +41,13 @@ class Failure implements CreatableInterface
 
     protected function message(): string
     {
-        $value = $this->throwable()->value();
-
-        $file = Str::sprintf('{closure:%s:%s}', $value->getFile(), $value->getLine());
+        $message = $this->throwable()->value()->getMessage() |> Str::of(...);
 
         $method = $this->method();
 
-        $message = $value->getMessage() |> Str::of(...);
+        $closure = $message->between('::', '()');
 
-        return Str::comma() |> $message->replace($file, $method)->beforeLast(...);
+        return $message->replace($closure, $method);
     }
 
     protected function throwable(): InteractsWithThrowableInterface
