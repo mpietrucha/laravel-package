@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Mpietrucha\PHPStan\Formatters;
 
+use Mpietrucha\Laravel\Essentials\Mixin\Analyzer;
+use Mpietrucha\PHPStan\Concerns\InteractsWithError;
 use Mpietrucha\Utility\Arr;
 use PHPStan\Analyser\Error;
 use PHPStan\Command\AnalysisResult;
@@ -15,6 +17,8 @@ use PHPStan\Command\Output;
  */
 final class MixinErrorFormatter implements ErrorFormatter
 {
+    use InteractsWithError;
+
     public function __construct(protected ErrorFormatter $table)
     {
     }
@@ -49,12 +53,12 @@ final class MixinErrorFormatter implements ErrorFormatter
 
     protected function error(Error $error): Error
     {
-        $message = $error->getMessage();
+        $indicator = Analyzer::indicator();
 
         /** @phpstan-ignore-next-line phpstanApi.constructor */
         return new Error(
-            $message,
-            $error->getFile(),
+            $this->getErrorMessage($error)->remove($indicator)->toString(),
+            $this->getErrorFile($error)->remove($indicator)->toString(),
             $error->getLine(),
             $error->canBeIgnored(),
             $error->getFilePath(),
