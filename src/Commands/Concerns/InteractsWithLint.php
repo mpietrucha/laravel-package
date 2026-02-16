@@ -5,6 +5,9 @@ namespace Mpietrucha\Laravel\Essentials\Commands\Concerns;
 use Mpietrucha\Utility\Collection;
 use Mpietrucha\Utility\Process;
 
+/**
+ * @phpstan-require-extends \Illuminate\Console\Command
+ */
 trait InteractsWithLint
 {
     /**
