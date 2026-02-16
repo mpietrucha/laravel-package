@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpietrucha\Laravel\Essentials\Providers;
+namespace Mpietrucha\Laravel\Essentials;
 
 use Mpietrucha\Laravel\Essentials\Commands\GenerateIdeHelpers;
 use Mpietrucha\Laravel\Essentials\Commands\GenerateMixinAnalyzers;
