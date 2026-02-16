@@ -12,12 +12,12 @@ class GenerateIdeHelpers extends Command
     /**
      * @var string
      */
-    protected $signature = 'ide:helpers';
+    protected $signature = 'essentials:ide-helpers';
 
     /**
      * @var string
      */
-    protected $description = 'Generate IDE helper files';
+    protected $description = 'Generate IDE helpers';
 
     public function handle(): void
     {
@@ -26,6 +26,6 @@ class GenerateIdeHelpers extends Command
 
         app_path('Models') |> $this->lint(...);
 
-        $this->info('IDE helper files generated successfully.');
+        $this->info('Helper files generated successfully.');
     }
 }

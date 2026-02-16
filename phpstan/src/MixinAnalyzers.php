@@ -25,6 +25,6 @@ abstract class MixinAnalyzers extends Action
 
     protected static function handle(): void
     {
-        Artisan::call('mixin:analyzers');
+        Artisan::call('essentials:mixin-analyzers');
     }
 }

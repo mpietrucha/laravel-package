@@ -12,6 +12,7 @@ use Mpietrucha\Utility\Enumerable\Contracts\EnumerableInterface;
 use Mpietrucha\Utility\Filesystem;
 use Mpietrucha\Utility\Filesystem\Extension;
 use Mpietrucha\Utility\Filesystem\Path;
+use Mpietrucha\Utility\Str;
 use Mpietrucha\Utility\Type;
 
 /**
@@ -24,7 +25,7 @@ class GenerateMixinAnalyzers extends Command
     /**
      * @var string
      */
-    protected $signature = 'mixin:analyzers
+    protected $signature = 'essentials:mixin-analyzers
                             {--directory=phpstan/cache : The output directory for generated analyzer files}
                             {--cwd= : The current working directory used for generating analyzers}';
 
@@ -35,24 +36,24 @@ class GenerateMixinAnalyzers extends Command
 
     public function handle(): void
     {
-        $files = Mixin::map()->pipeThrough([
+        $analyzers = Mixin::map()->pipeThrough([
             fn (EnumerableInterface $map) => $this->build(...) |> $map->mapWithKeys(...),
             fn (EnumerableInterface $map) => $map->filter(),
             fn (EnumerableInterface $map) => Filesystem::put(...) |> $map->eachKeys(...),
             fn (EnumerableInterface $map) => $map->keys(),
         ]);
 
-        if ($files->isEmpty()) {
-            $this->info('No mixins found.');
+        if ($analyzers->isEmpty()) {
+            $this->warn('No registered mixins found. Register mixins in your service provider before running this command.');
 
             return;
         }
 
-        $files->each(fn (string $file) => $this->components->task($file));
+        $this->lint($analyzers);
 
-        $this->lint($files);
+        $analyzers->each(fn (string $analyzer) => $this->components->task($analyzer));
 
-        $this->info('Mixin analyzers generated successfully.');
+        Str::sprintf('%s mixin analyzer(s) generated in [%s].', $analyzers->count(), $this->directory()) |> $this->info(...);
     }
 
     /**

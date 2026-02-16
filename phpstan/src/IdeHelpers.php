@@ -26,6 +26,6 @@ abstract class IdeHelpers extends Action
 
     protected static function handle(): void
     {
-        Artisan::call('ide:helpers');
+        Artisan::call('essentials:ide-helpers');
     }
 }
