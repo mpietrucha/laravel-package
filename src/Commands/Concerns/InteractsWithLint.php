@@ -19,5 +19,6 @@ trait InteractsWithLint
         $files = Collection::wrap($files);
 
         Process::run(['composer', 'lint', ...$files]);
+        Process::run(['npm', 'run', 'lint', ...$files]);
     }
 }
