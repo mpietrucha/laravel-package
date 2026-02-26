@@ -6,7 +6,6 @@ use Illuminate\Console\Command;
 use Mpietrucha\Laravel\Essentials\Commands\Concerns\InteractsWithLint;
 use Mpietrucha\Laravel\Essentials\Mixin;
 use Mpietrucha\Laravel\Essentials\Mixin\Analyzer;
-use Mpietrucha\Laravel\Essentials\Package\Context;
 use Mpietrucha\Utility\Collection;
 use Mpietrucha\Utility\Enumerable\Contracts\EnumerableInterface;
 use Mpietrucha\Utility\Filesystem;
@@ -85,7 +84,7 @@ class GenerateMixinAnalyzers extends Command
         $directory = $this->option('directory');
 
         /** @var string $cwd */
-        $cwd = $this->option('cwd') ?? Context::directory(Context::INTERNAL);
+        $cwd = $this->option('cwd') ?? Path::directory(__DIR__, 2);
 
         return Path::build($directory, $cwd);
     }
