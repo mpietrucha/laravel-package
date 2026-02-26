@@ -23,6 +23,7 @@ class Lint extends Command
 
     public function handle(): void
     {
+        /** @var string $path */
         $path = $this->argument('path') ?? Cwd::get();
 
         $this->lint($path);

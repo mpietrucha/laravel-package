@@ -12,9 +12,9 @@ use Mpietrucha\Utility\Type;
  */
 abstract class Translation
 {
-    public static function key(string $key): string
+    public static function key(object|string $context, string $key): string
     {
-        $name = Context::name();
+        $name = Context::name($context);
 
         return Type::null($name) ? $key : Str::sprintf('%s::%s', $name, $key);
     }
@@ -22,9 +22,9 @@ abstract class Translation
     /**
      * @param  null|TranslationProperties  $properties
      */
-    public static function get(string $key, ?array $properties = null): string
+    public static function get(object|string $context, string $key, ?array $properties = null): string
     {
-        $key = static::key($key);
+        $key = static::key($context, $key);
 
         return __($key, static::properties($properties));
     }
@@ -32,9 +32,9 @@ abstract class Translation
     /**
      * @param  null|TranslationProperties  $properties
      */
-    public static function choice(string $key, int $count, ?array $properties = null): string
+    public static function choice(object|string $context, string $key, int $count, ?array $properties = null): string
     {
-        $key = static::key($key);
+        $key = static::key($context, $key);
 
         return trans_choice($key, $count, static::properties($properties));
     }

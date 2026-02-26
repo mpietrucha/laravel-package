@@ -22,7 +22,7 @@ trait InteractsWithTranslations
      */
     public static function t(string $key, ?array $properties = null): string
     {
-        return Translation::get($key, $properties);
+        return Translation::get(static::class, $key, $properties);
     }
 
     /**
@@ -30,6 +30,6 @@ trait InteractsWithTranslations
      */
     public static function tc(string $key, int $count, ?array $properties = null): string
     {
-        return Translation::choice($key, $count, $properties);
+        return Translation::choice(static::class, $key, $count, $properties);
     }
 }
