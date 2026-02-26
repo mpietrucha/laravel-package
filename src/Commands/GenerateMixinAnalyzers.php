@@ -85,7 +85,7 @@ class GenerateMixinAnalyzers extends Command
         $directory = $this->option('directory');
 
         /** @var string $cwd */
-        $cwd = $this->option('cwd') ?? Context::directory($this);
+        $cwd = $this->option('cwd') ?? Context::directory(Context::INTERNAL);
 
         return Path::build($directory, $cwd);
     }

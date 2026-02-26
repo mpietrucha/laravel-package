@@ -2,28 +2,49 @@
 
 namespace Mpietrucha\Laravel\Essentials\Package;
 
+use Mpietrucha\Laravel\Essentials\Package\Context\File;
+use Mpietrucha\Utility\Backtrace;
+use Mpietrucha\Utility\Enumerable\Contracts\EnumerableInterface;
 use Mpietrucha\Utility\Filesystem\Path;
-use Mpietrucha\Utility\Instance;
 use Mpietrucha\Utility\Str;
 use Mpietrucha\Utility\Type;
 
 abstract class Context
 {
-    public static function directory(object|string $context): ?string
+    public const bool EXTERNAL = true;
+
+    public const bool INTERNAL = false;
+
+    public static function directory(bool $type = self::EXTERNAL): ?string
     {
-        $file = Instance::file($context);
+        $backtrace = Backtrace::get(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+
+        $handler = match (true) {
+            $type === self::EXTERNAL => File::external(...),
+            $type === self::INTERNAL => File::internal(...)
+        };
+
+        $file = $backtrace->pipeThrough([
+            fn (EnumerableInterface $backtrace) => $backtrace->map->file(),
+            fn (EnumerableInterface $backtrace) => $backtrace->filter(),
+            fn (EnumerableInterface $backtrace) => $backtrace->first($handler),
+        ]);
 
         if (Type::null($file)) {
             return null;
         }
 
-        return Str::before($file, 'src') |> Path::canonicalize(...) |> Str::nullWhenEmpty(...);
+        return Str::before($file, 'src') |> Path::canonicalize(...);
     }
 
-    public static function name(object|string $context): ?string
+    public static function name(bool $type = self::EXTERNAL): ?string
     {
-        $directory = static::directory($context);
+        $directory = static::directory($type);
 
-        return Type::null($directory) ? null : Path::name($directory);
+        if (Type::null($directory)) {
+            return null;
+        }
+
+        return Path::name($directory);
     }
 }

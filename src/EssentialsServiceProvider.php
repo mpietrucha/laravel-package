@@ -10,9 +10,14 @@ use Mpietrucha\Laravel\Essentials\Package\ServiceProvider;
 
 class EssentialsServiceProvider extends ServiceProvider
 {
+    public static function name(): string
+    {
+        return 'laravel-essentials';
+    }
+
     public function configure(Builder $package): void
     {
-        $package->name('laravel-essentials');
+        static::name() |> $package->name(...);
 
         $package->hasConsoleCommands([
             Lint::class,
